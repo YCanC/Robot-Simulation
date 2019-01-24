@@ -1,0 +1,2229 @@
+
+import java.awt.*;
+import javax.swing.*;
+
+
+
+public class izgara extends JFrame{
+    
+    int engelsayisi;
+    int engelx,engely;
+    int yonx,yony,gezginstartx,gezginstarty;
+    int engeltespitx, engeltespity,gezinmehizi;
+    int spiderEngel=0;
+    int i=0;
+    int [] engelxdizisi = new int[400];
+    int [] engelydizisi = new int[400];
+    int [] adimlarx = new int[400];
+    int [] adimlary = new int[400];  
+    
+    int sabitx=0; int sabity=0;
+    int tasimahizi2;
+    
+    int as=0;
+    float sure=0; float mesafe=0;   float tasimaMesafesi=0; float sure2=0; float sure3=0; 
+                  float mesafe2=0;   float toplamTasimaMesafesi=0;
+    int tasimaMesafesiKontrol=0;
+    
+    float toplamEngelGecmeSuresi=0;
+    
+    String tipKontrol;
+    
+    
+   void robotTipiAl(String robotTipi)
+   {
+       //1,1 için baþlangýç deðer atamasý
+       for(int yc=0; yc<50; yc++)
+    {
+        engelydizisi[yc]=5058;
+    }
+       
+       tipKontrol=robotTipi;
+       
+   }
+    
+  void engelSayisiAl(int engelsayisi)
+  {
+      this.engelsayisi=engelsayisi;
+  }
+ 
+    void engelKoordinat(int engelx, int engely)
+  {
+      this.engelx=engelx-1;
+      this.engely=engely-1;
+      engelxdizisi[i]=engelx-1;
+      engelydizisi[i]=engely-1;
+      i++;
+  }
+    void gezginStartKoordinat(int gezginstartx, int gezginstarty)
+    {
+        this.gezginstartx=gezginstartx-1;
+        this.gezginstarty=gezginstarty-1;
+        adimlarx[as]=gezginstartx-1;
+        adimlary[as]=gezginstarty-1;
+    }
+   
+    void gezginSonKoordinat(int yonx, int yony, int yonx2, int yony2, int gezinmehizi)
+    {      
+        as++;
+       if(engelKontrol2())
+       {        
+       }
+      if(engelKontrol2()==false)
+       {
+        this.yonx=yonx;
+        this.yony=yony;
+       adimlarx[as]+=(adimlarx[as-1]+yonx2);
+       adimlary[as]+=(adimlary[as-1]+yony2);
+       mesafe+=Math.abs(yonx2*10);
+       mesafe+=Math.abs(yony2*10);
+       mesafe2=Math.abs(yonx2*10)+Math.abs(yony2*10);
+       
+           
+           
+       sure+=(mesafe2/gezinmehizi);
+       }
+       System.out.println("gezinme hizi : "+gezinmehizi);
+    
+        this.gezinmehizi=gezinmehizi;
+    }
+    
+    void hibritSabitleme()
+    {
+        System.out.println("Hibrit robotu sabitleme iþlemi yapýlýyor..");
+        gezginstartx+=yonx;
+        gezginstarty+=yony;
+        yonx=0;
+        yony=0;
+    }
+    //manipulator yük koordinat alma iþlemi
+    
+    void yukSonKoordinat(int yonx, int yony, int yonx2, int yony2, int tasimahizi, int koluzunlugu)
+    {
+        
+        this.yonx = yonx;
+        this.yony=yony;
+        tasimaMesafesi = (float) Math.sqrt( (yonx*10 * yonx*10) + (yony*10 * yony*10));
+        tasimahizi2=tasimahizi;
+               
+        
+        if(tasimaMesafesi>koluzunlugu)
+        {
+          
+            System.out.println("Taþýma mesafesi kol uzunlugunu aþtý ");
+            
+                while(koluzunlugu<(this.yonx*10))
+            {
+                
+                this.yonx-=1;
+            }
+   
+              while(koluzunlugu<(this.yony*10))
+            {
+               
+                this.yony-=1;
+            }
+        sure3 = (koluzunlugu/tasimahizi);
+         sure2 = (toplamTasimaMesafesi/tasimahizi);
+            tasimaMesafesiKontrol=1;
+        }
+        if(tasimaMesafesi<=koluzunlugu)
+        {
+            toplamTasimaMesafesi +=(float) Math.sqrt( (yonx2*10 * yonx2*10) + (yony2*10 * yony2*10));
+         
+            sure3 = (tasimaMesafesi/tasimahizi);
+            sure2 = (toplamTasimaMesafesi/tasimahizi);
+        }
+        
+    }
+    boolean TasimaMesafeKontrol()
+    {
+        return tasimaMesafesiKontrol==1;
+    }
+ 
+ void sure3Goster(int sabitlemesuresi, int gecissuresi)
+ {
+     System.out.println("Yük taþýma hýzýna göre toplam süre : "+( sure+sure3+sabitlemesuresi+gecissuresi)+ " saniye");
+     System.out.println("Yük taþýma süratine göre toplam süre : "+(sure + sure2+sabitlemesuresi+gecissuresi)+ " saniye");
+ }
+ 
+  void sure2Goster()
+ {
+      System.out.println("Yukun taþýnma süratine göre : "+sure2+ " saniye");
+      System.out.println("Yukun taþýnma hizina göre : "+sure3+ " saniye");
+ }
+void sureGoster()
+{
+    System.out.println("gezilen süre: "+sure + " saniye");
+}
+boolean ciktimi()
+{
+    if((this.gezginstartx*50)+20+(50*this.yonx)<20 || (this.gezginstarty*50)+40+(50*this.yony)<40)
+    {
+        while(mesafe2>0)
+        {          
+            sure-=(10/gezinmehizi);
+             mesafe2-=10;
+             
+        }
+        
+        
+        while((this.gezginstartx*50)+20+(50*this.yonx)<20)
+                {
+                   
+                 yonx++;                
+                 tasimaMesafesi-=10;
+                 toplamTasimaMesafesi-=10;
+            // sure-=(mesafe2/gezinmehizi);
+                    //System.out.println("bool sure : "+sure);
+             sure3 = (tasimaMesafesi/tasimahizi2);
+            sure2 = (toplamTasimaMesafesi/tasimahizi2);
+                
+                }
+        while((this.gezginstarty*50)+40+(50*this.yony)<40)
+                {
+                    
+                 yony++;  
+               
+                 tasimaMesafesi-=10;
+                 toplamTasimaMesafesi-=10;
+                //sure-=(mesafe2/gezinmehizi);
+                 
+                 sure3 = (tasimaMesafesi/tasimahizi2);
+              sure2 = (toplamTasimaMesafesi/tasimahizi2);
+                  
+                }
+        return true;
+    }
+       
+    return false;
+}
+
+boolean engelKontrol2()
+{
+        return (spiderEngel ==1);    
+}
+
+  void engelKontrol(float engelgecmesuresi)
+  {
+
+     for(int k =0; k<=engelsayisi; k++)
+    {
+      //x soldan saða
+        if(adimlarx[as]>adimlarx[as-1] && adimlary[as]==engelydizisi[k])
+     {      
+        for(int o=adimlarx[as-1]; o<= adimlarx[as]; o++)
+        { 
+                if(engelxdizisi[k] == o)
+        {
+           if(tipKontrol.equalsIgnoreCase("tekerlekli") || tipKontrol.equalsIgnoreCase("paletli") || tipKontrol.equalsIgnoreCase("hibrit"))
+           {
+               System.out.println("Engele dokundu");
+                System.out.println("engel gecme suresi:  "+engelgecmesuresi);             
+              
+              
+           sure+=engelgecmesuresi;
+              
+
+           }
+           if(tipKontrol.equalsIgnoreCase("spider") || tipKontrol.equalsIgnoreCase("hibrit.spider") )
+           {
+               System.out.println("Spider robot engeli geçemez ");
+               spiderEngel =1;
+               
+             mesafe-=Math.abs(10*((gezginstartx+this.yonx)-engelxdizisi[k]));
+             mesafe-=Math.abs(10*((gezginstarty+this.yony)-engelydizisi[k]));
+           
+            System.out.println(" spider robotun aldýgý toplam mesafe =  "+mesafe);
+            
+                sure=(mesafe/gezinmehizi);
+                
+             
+           }
+           
+        }
+  
+       } 
+     } 
+        // x saðdan sola
+         if(adimlarx[as]<adimlarx[as-1] && adimlary[as]==engelydizisi[k])
+     {      
+        for(int o=adimlarx[as]; o<= adimlarx[as-1]; o++)
+        { 
+                if(engelxdizisi[k] == o)
+        {
+          if(tipKontrol.equalsIgnoreCase("tekerlekli") || tipKontrol.equalsIgnoreCase("paletli") || tipKontrol.equalsIgnoreCase("hibrit"))
+           {
+               System.out.println("Engele dokundu");
+               System.out.println("engel gecme suresi:  "+engelgecmesuresi);             
+            
+              
+               sure+=engelgecmesuresi;
+               
+               
+           }      
+          if(tipKontrol.equalsIgnoreCase("spider")|| tipKontrol.equalsIgnoreCase("hibrit.spider") )
+           {
+               System.out.println("Spider robot engeli geçemez ");
+               
+         mesafe-=Math.abs(10*((gezginstartx+this.yonx)-engelxdizisi[k]));
+           mesafe-=Math.abs(10*((gezginstarty+this.yony)-engelydizisi[k]));
+    System.out.println(" spider robotun aldýgý toplam mesafe =  "+mesafe);
+               
+               spiderEngel =1;
+                sure=(mesafe/gezinmehizi);
+                
+               
+           }
+          
+        }
+  
+       } 
+     }
+      
+      //y yukarýdan aþaðý
+      if(adimlary[as]>adimlary[as-1] && adimlarx[as]== engelxdizisi[k])
+      {
+          for(int o = adimlary[as-1]; o<=adimlary[as]; o++)
+          {
+              if(engelydizisi[k]==o)
+              {
+                  if(tipKontrol.equalsIgnoreCase("tekerlekli") || tipKontrol.equalsIgnoreCase("paletli") || tipKontrol.equalsIgnoreCase("hibrit"))
+           {
+               System.out.println("Engele dokundu");
+           System.out.println("engel gecme suresi:  "+engelgecmesuresi);             
+             
+           
+                 sure+=engelgecmesuresi;
+              
+           }
+                  
+                  if(tipKontrol.equalsIgnoreCase("spider")|| tipKontrol.equalsIgnoreCase("hibrit.spider") )
+           {
+               System.out.println("Spider robot engeli geçemez ");
+               spiderEngel =1;
+                mesafe-=Math.abs(10*((gezginstartx+this.yonx)-engelxdizisi[k]));
+           mesafe-=Math.abs(10*((gezginstarty+this.yony)-engelydizisi[k]));
+             
+               System.out.println(" spider robotun aldýgý toplam mesafe = "+mesafe);
+                sure=(mesafe/gezinmehizi);
+            
+           }
+              }
+              
+          }
+      }
+      
+      //y aþaðýdan yukarý
+      if(adimlary[as-1]>adimlary[as] && adimlarx[as]== engelxdizisi[k])
+      {
+          for(int o = adimlary[as]; o<=adimlary[as-1]; o++)
+          {
+              if(engelydizisi[k]==o)
+              {
+                   if(tipKontrol.equalsIgnoreCase("tekerlekli") || tipKontrol.equalsIgnoreCase("paletli") || tipKontrol.equalsIgnoreCase("hibrit"))
+           {
+               System.out.println("Engele dokundu");
+               System.out.println("engelgecme suresi:  "+engelgecmesuresi);             
+              
+              
+                sure+=engelgecmesuresi;
+               System.out.println("engele dokunduktan sonraki süre : "+sure);
+           }
+            
+           if(tipKontrol.equalsIgnoreCase("spider")|| tipKontrol.equalsIgnoreCase("hibrit.spider"))
+           {
+               System.out.println("Spider robot engeli geçemez ");
+               
+           mesafe-=Math.abs(10*((gezginstartx+this.yonx)-engelxdizisi[k]));
+           mesafe-=Math.abs(10*((gezginstarty+this.yony)-engelydizisi[k]));
+                System.out.println(" spider robotun aldýgý toplam mesafe = "+mesafe);
+               spiderEngel =1;
+                sure=(mesafe/gezinmehizi);
+              
+           }
+                   
+              }
+              
+          }
+  
+      }
+   
+    } 
+   
+  }
+
+    @Override
+      public void paint (Graphics engel){
+              
+          super.paint(engel);
+       
+            Test t = new Test();
+
+        for (int i = 40; i <= 1000; i+=50) {
+            for (int j = 20; j < 1000; j+=50) {
+                 engel.drawRect(j, i, 50, 50);
+            }
+        }
+    engel.setColor(Color.BLACK);
+    for(int k=0; k<engelsayisi; k++)
+    {
+         engel.fillRect((engelxdizisi[k]*50)+20, (engelydizisi[k]*50)+40, 50, 50); 
+         if(engelKontrol2())
+     {
+         engel.setColor(Color.RED);
+         engel.fillRect((engelxdizisi[k]*50)+20, (engelydizisi[k]*50)+40, 50, 50);
+       
+     }
+    
+    }
+    
+    engel.setColor(Color.RED);
+  
+    //gezginin baþlangýç konumu
+    engel.fillOval((this.gezginstartx*50)+20, (this.gezginstarty*50)+40, 50, 50);
+    // engel.fillRect((this.gezginx*50)+20, (this.gezginy*50)+40, 50, 50);
+   
+    
+   engel.setColor(Color.BLUE);
+   if(engelKontrol2()==false)
+   {
+       if(ciktimi())
+       {
+           engel.setColor(Color.magenta);
+           engel.fillRect((this.gezginstartx*50)+20+(50*this.yonx), (this.gezginstarty*50)+40+(50*this.yony), 50, 50);
+       }
+       
+        engel.fillRect((this.gezginstartx*50)+20+(50*this.yonx), (this.gezginstarty*50)+40+(50*this.yony), 50, 50);
+        
+        
+        sabitx+=(gezginstartx+yonx);
+        sabity+=(gezginstarty+yony);
+   }
+   
+    
+    
+    
+        
+    }
+
+    
+}
+
+import java.util.*;
+
+
+
+public class Test {
+ 
+
+    public static void main(String[] args) {
+
+        Scanner scan = new Scanner(System.in);
+        Scanner scan2= new Scanner(System.in);
+        Scanner scan3 = new Scanner(System.in);
+       //Nesne dizileri oluþturma kýsmý
+ 
+       
+        TekerlekliRobot t[] = new TekerlekliRobot[10];
+        PaletliRobot p[]=new PaletliRobot[10];
+        SpiderRobot s2[] = new SpiderRobot[10];
+        Hibrit h[] = new Hibrit[10];
+        ParalelRobot p2[] = new ParalelRobot[10];
+        SeriRobot s[]=new SeriRobot[10];
+        
+        System.out.println("Kaç robot tanýmlamak istiyorsunuz ?");
+        int sayac;
+        sayac=scan.nextInt();
+        scan.nextLine();
+        
+        int tasimahizikontrol=0;
+        int kapasitekontrol=0;
+        int sayi;
+        String robotTipi,Hibrit1,Hibrit2;
+        int i=0;
+        int k;
+       String engelKontrol; int engelsayisi;  
+        int gezginx,gezginy,gezginstartx,gezginstarty;
+        int manistartx, manistarty;
+        int hibritstartx, hibritstarty;
+        
+       //   t[5]= new TekerlekliRobot();
+       //  t[5].getMotorsayisi(5);
+      
+       int seriKapasite=0;
+       int paralelKapasite=0;
+       
+       int tekerlekliMin=10;
+       int PaletliMin=5;
+       int SpiderMin=1;
+       int hibritParalelKontrol=0;
+       int hibritPyuk=0;
+       
+        while(true)
+        {
+            if(sayac==0)
+            {
+                break;
+            }
+            
+            System.out.println((i+1)+". robot tipini giriniz ");
+          
+            
+            robotTipi=scan.nextLine();
+            
+           if(robotTipi.equalsIgnoreCase("tekerlekli")==true)
+           {
+                t[i]= new TekerlekliRobot();
+               System.out.println("Motor sayýsýný giriniz");
+               sayi = scan.nextInt();
+               t[i].setMotorsayisi(sayi);
+               System.out.println("Yuk miktarini giriniz");
+               sayi=scan.nextInt();
+               t[i].setYukmiktari(sayi);
+               System.out.println("Teker sayisini giriniz");
+               sayi=scan.nextInt();
+               t[i].setTekersayisi(sayi);
+               System.out.println("Tekerlekli robotun minimum hýzý : "+tekerlekliMin);
+               System.out.println("Gezinme hýzýný giriniz");
+               sayi=scan.nextInt();
+               t[i].setGezinmehizi(sayi);
+               while(t[i].gezinmeHizi<tekerlekliMin)
+               {
+                   System.out.println("Tekerlekli robotun minimum hýzý : "+tekerlekliMin+" olmalý !!..");
+               System.out.println("Gezinme hýzýný giriniz");
+               sayi=scan.nextInt();
+               t[i].setGezinmehizi(sayi);
+               }
+               
+                i++;
+           }
+           
+           if(robotTipi.equalsIgnoreCase("paletli")==true)
+           {
+                p[i]= new PaletliRobot();
+               System.out.println("Motor sayýsýný giriniz");
+               sayi = scan.nextInt();
+               p[i].setMotorsayisi(sayi);
+               System.out.println("Yuk miktarini giriniz");
+               sayi=scan.nextInt();
+               p[i].setYukmiktari(sayi);
+               System.out.println("Palet sayisini giriniz");
+               sayi=scan.nextInt();
+               p[i].setPaletsayisi(sayi);
+               
+                System.out.println("Paletli robotun minimum hýzý : "+PaletliMin);
+               System.out.println("Gezinme hýzýný giriniz");
+               sayi=scan.nextInt();
+               p[i].setGezinmehizi(sayi);
+               
+               while(p[i].gezinmeHizi<PaletliMin)
+               {
+                   System.out.println("Paletli robotun minimum hýzý "+PaletliMin +" olmalý !!..");
+               System.out.println("Gezinme hýzýný giriniz");
+               sayi=scan.nextInt();
+               p[i].setGezinmehizi(sayi);
+                   
+               }
+        
+               
+                i++;
+           }
+           
+               if(robotTipi.equalsIgnoreCase("spider")==true)
+           {
+                s2[i]= new SpiderRobot();
+               System.out.println("Motor sayýsýný giriniz");
+               sayi = scan.nextInt();
+               s2[i].setMotorsayisi(sayi);
+               System.out.println("Yuk miktarini giriniz");
+               sayi=scan.nextInt();
+               s2[i].setYukmiktari(sayi);
+               System.out.println("Bacak sayisini giriniz");
+               sayi=scan.nextInt();
+               s2[i].getBacakSayisi(sayi);
+               
+               System.out.println("Spider robotun minimum hýzý : "+SpiderMin);
+               System.out.println("Gezinme hýzýný giriniz");
+               sayi=scan.nextInt();
+               s2[i].setGezinmehizi(sayi);
+               while(s2[i].gezinmeHizi<SpiderMin)
+               {
+                   System.out.println("Spider robotun minimum hýzý : "+SpiderMin+" olmalý!!..");
+               System.out.println("Gezinme hýzýný giriniz");
+               sayi=scan.nextInt();
+               s2[i].setGezinmehizi(sayi);
+               }
+               
+                i++;
+           }
+           
+           
+           
+           
+           
+             if(robotTipi.equalsIgnoreCase("paralel")==true)
+           {
+               if(paralelKapasite==0)
+               {
+               System.out.println("Paralel robotlarýn yuk kapasitesini giriniz");
+               paralelKapasite = scan.nextInt();
+               }
+
+                p2[i]= new ParalelRobot();
+               System.out.println("Motor sayýsýný giriniz");
+               sayi = scan.nextInt();
+               p2[i].setMotorsayisi(sayi);
+               
+              //kapasite iþlemi
+            /*    System.out.println("Yuk kapasitesini giriniz");
+              sayi=scan.nextInt();
+              p2[i].setKapasite(sayi);
+              */
+            
+               System.out.println("Yuk miktarini giriniz");
+               sayi=scan.nextInt();
+              p2[i].setYukmiktari(sayi);
+              
+              
+                while(p2[i].yukmiktari>paralelKapasite)
+                 {
+                    System.out.println("Yuk miktari kapasiteden fazla olamaz!!.. ");
+                      //kapasite iþlemi
+                 System.out.println("Yuk miktarini giriniz");
+                 sayi=scan.nextInt();
+                 p2[i].setYukmiktari(sayi);
+              
+                 }
+               kapasitekontrol=p2[i].kapasite;
+                
+                System.out.println("Kol uzunlugunu giriniz ");
+                 sayi=scan.nextInt();
+                 p2[i].setKoluzunlugu(sayi);
+              
+               System.out.println("Taþýma hýzýný giriniz ");
+                sayi=scan.nextInt();
+               p2[i].setTasimahizi(sayi);
+               tasimahizikontrol = p2[i].tasimahizi;
+                i++;
+                
+           }
+           
+             
+            if(robotTipi.equalsIgnoreCase("seri")==true)
+           {
+               if(seriKapasite==0)
+               {
+                System.out.println("Seri robotlarýn yük kapasitesini giriniz");
+               seriKapasite = scan.nextInt();
+               }
+             while(paralelKapasite!=0 && seriKapasite>paralelKapasite)
+             {
+               System.out.println("seri robotun kapasitesi paralelden fazla olamaz !!..");
+               System.out.println("Seri robotlarýn yük kapasitesini giriniz");
+               seriKapasite = scan.nextInt();
+             }
+               
+               
+                s[i]= new SeriRobot();
+               System.out.println("Motor sayýsýný giriniz");
+               sayi = scan.nextInt();
+               s[i].setMotorsayisi(sayi);
+               
+             
+             /*  System.out.println("Yuk kapasitesini giriniz");
+               sayi=scan.nextInt();
+               s[i].setKapasite(sayi);
+  
+                while(s[i].kapasite<kapasitekontrol)
+               {
+               System.out.println("Seri robot nesnesi Paralel robot nesnesinden fazla yük kaldýramaz!!");
+               System.out.println("Yuk kapasitesini giriniz");
+               sayi=scan.nextInt();
+               s[i].setKapasite(sayi);
+               }              
+               */
+
+             System.out.println("Yuk miktarini giriniz");
+               sayi=scan.nextInt();
+               s[i].setYukmiktari(sayi);
+ 
+              while(seriKapasite<s[i].yukmiktari)
+              {
+              System.out.println("Yuk miktari kapasiteden fazla olamaz!!..");
+               //kapasite iþlemi
+               System.out.println("Yuk miktarini giriniz");
+               sayi=scan.nextInt();
+               s[i].setYukmiktari(sayi);
+              }
+              
+               System.out.println("Kol uzunlugunu giriniz");
+               sayi=scan.nextInt();
+              s[i].setKoluzunlugu(sayi);
+              
+               System.out.println("Taþýma hýzýný giriniz ");
+               sayi=scan.nextInt();
+               s[i].setTasimahizi(sayi);
+               while(s[i].tasimahizi>tasimahizikontrol && tasimahizikontrol!=0)
+               {
+                   System.out.println("Seri robotlarýn taþýma hýzý paralel robotlarýnkinden fazla olamaz!!..");
+                   
+               System.out.println("Taþýma hýzýný giriniz ");
+               sayi=scan.nextInt();
+               s[i].setTasimahizi(sayi);
+                   
+               }
+              i++;   
+           }
+           
+           if(robotTipi.equalsIgnoreCase("hibrit")==true)
+           {
+               System.out.println("Hibrit için hareketli kýsým : ");
+               Hibrit1=scan.nextLine();
+               System.out.println("Hibrit için manipulator kýsým : ");
+               Hibrit2=scan.nextLine();
+               
+               //Hepsi için ortak özellikleri alma kýsmý
+                h[i]= new Hibrit();
+               System.out.println("Motor sayýsýný giriniz ");
+               sayi = scan.nextInt();
+               h[i].setMotorsayisi(sayi);
+               
+               System.out.println("Yük kapasitesini giriniz ");
+               sayi=scan.nextInt();
+               h[i].setKapasite(sayi);
+               if(Hibrit2.equalsIgnoreCase("paralel"))
+               {
+                   hibritPyuk=h[i].kapasite;
+               }
+                 if(Hibrit2.equalsIgnoreCase("seri"))
+               {
+                   while(hibritPyuk!=0 && h[i].kapasite>hibritPyuk)
+                   {
+               System.out.println("Hibrit serinin yük kapasitesi hibrit paralelinkinden fazla olamaz!!..");
+               System.out.println("Yük kapasitesini giriniz ");
+               sayi=scan.nextInt();
+               h[i].setKapasite(sayi);
+                   }
+                   
+               }
+               
+               System.out.println("Yuk miktarini giriniz ");
+               sayi=scan.nextInt();
+               h[i].setYukmiktari(sayi);
+               while(h[i].yukmiktari>h[i].kapasite)
+               {
+              System.out.println("yük miktari kapasiteden fazla olamaz..");
+              System.out.println("Yuk miktarini giriniz ");
+               sayi=scan.nextInt();
+               h[i].setYukmiktari(sayi);
+               }
+               
+               
+               System.out.println("Gezinme hýzýný giriniz ");
+               sayi=scan.nextInt();
+               h[i].setGezinmehizi(sayi);
+               if(Hibrit1.equalsIgnoreCase("tekerlekli"))
+               {
+                   while(h[i].gezinmeHizi<tekerlekliMin)
+                   {
+                System.out.println("Hibrit tekerlekli robotlarýn minimum hýzý :"+ tekerlekliMin+ " olmalýdýr");
+               System.out.println("Gezinme hýzýný giriniz ");
+               sayi=scan.nextInt();
+               h[i].setGezinmehizi(sayi);
+                       
+                   }
+               }
+                   if(Hibrit1.equalsIgnoreCase("paletli"))
+               {
+                   while(h[i].gezinmeHizi<PaletliMin)
+                   {
+                System.out.println("Hibrit tekerlekli robotlarýn minimum hýzý :"+ PaletliMin+ " olmalýdýr");
+               System.out.println("Gezinme hýzýný giriniz ");
+               sayi=scan.nextInt();
+               h[i].setGezinmehizi(sayi);
+                       
+                   }
+               }
+                        if(Hibrit1.equalsIgnoreCase("spider"))
+               {
+                   while(h[i].gezinmeHizi<SpiderMin)
+                   {
+                System.out.println("Hibrit tekerlekli robotlarýn minimum hýzý :"+SpiderMin+ " olmalýdýr");
+               System.out.println("Gezinme hýzýný giriniz ");
+               sayi=scan.nextInt();
+               h[i].setGezinmehizi(sayi);
+                       
+                   }
+               }
+                     
+               System.out.println("Kol uzunlugunu giriniz ");
+               sayi=scan.nextInt();
+               h[i].setKoluzunlugu(sayi);
+              
+                System.out.println("Taþýma hýzýný giriniz ");
+                sayi=scan.nextInt();
+                h[i].setTasimahizi(sayi);
+                if(Hibrit2.equalsIgnoreCase("paralel"))
+                {
+                    hibritParalelKontrol=h[i].tasimahizi;
+                }
+                if(Hibrit2.equalsIgnoreCase("seri"))
+                {
+                   while(h[i].tasimahizi>hibritParalelKontrol && hibritParalelKontrol !=0)
+                   {
+                       System.out.println("Hibrit seri robotun taþýma hýzý hibrit paralel robotun taþýma hýzýndan fazla olamaz!!..");
+                System.out.println("Taþýma hýzýný giriniz ");
+                sayi=scan.nextInt();
+                h[i].setTasimahizi(sayi);
+                   }
+                    
+                }
+               if(Hibrit1.equalsIgnoreCase("tekerlekli"))
+               {
+               System.out.println("Teker sayisini giriniz");
+               sayi=scan.nextInt();
+               h[i].setTekersayisi(sayi);
+               }
+               
+               if(Hibrit1.equalsIgnoreCase("paletli"))
+               {
+               System.out.println("Palet sayisini giriniz");
+               sayi=scan.nextInt();
+               h[i].setPaletsayisi(sayi);
+               }
+               
+                if(Hibrit1.equalsIgnoreCase("spider"))
+               {
+               System.out.println("Bacak sayisini giriniz");
+               sayi=scan.nextInt();
+               h[i].setBacakSayisi(sayi);
+
+               }
+                
+                System.out.println("Sabitlenme suresini giriniz ");
+                sayi=scan.nextInt();
+                h[i].getSabitlenmeSuresi(sayi);
+                
+                System.out.println("Gecis suresini giriniz ");
+                sayi=scan.nextInt();
+                h[i].getGecisSuresi(sayi);
+                
+                
+               i++;
+               
+           }
+           
+           
+           
+           
+         scan.nextLine();
+            sayac--;
+          
+            
+        }
+        
+        System.out.println("kaçýncý robot problemi çözsün ?");
+        k = scan.nextInt();
+        
+        //grafik kütüphanesi baþlangýcý
+        izgara pencere = new izgara();
+      //tekerlekli robot iþlemleri*******************************************
+        if(t[k-1]!=null)
+        {
+            float engelgecmesuresi = t[k-1].EngelGecmeSuresiBul();
+            //Tekerlekli problemi çözer...
+            pencere.robotTipiAl("tekerlekli");
+            scan.nextLine();
+            System.out.println("Engel girmek istiyor musunuz ?");
+            engelKontrol=scan.nextLine();
+            
+            if(engelKontrol.equalsIgnoreCase("evet"))
+            {
+                System.out.println("Engel sayisini giriniz");
+                engelsayisi = scan.nextInt();
+                pencere.engelSayisiAl(engelsayisi);
+                int engelsayaci=1;
+                int engelx, engely;
+                while(engelsayisi>0)
+                {
+                    System.out.println(engelsayaci+ " engel koordinatýný giriniz ");
+                    System.out.println("x koordinatý :");
+                    engelx = scan.nextInt();
+                    System.out.println("y koordinatý ");
+                    engely=scan.nextInt();
+                   
+                    pencere.engelKoordinat(engelx, engely);
+                     
+                    engelsayisi--;
+                    engelsayaci++;
+                }
+            
+        
+            }
+            System.out.println("Tekerlekli robotun baþlangýç konumunu giriniz");
+            
+            gezginx=scan.nextInt();
+            gezginy=scan.nextInt();
+            
+            gezginstartx = gezginx;
+            gezginstarty = gezginy;
+           
+            int yonx=0;
+           int yony=0;
+           
+        //   hareket alma iþlemi-------------------
+              pencere.setSize(1200,1200);
+                pencere.setVisible(true);
+               pencere.gezginStartKoordinat(gezginstartx, gezginstarty);
+               
+           while(true)
+        {
+          System.out.println("Yön bilgisi giriniz cikis icin cikis yaziniz");
+
+          String yön;
+          yön=scan2.nextLine();
+          int yony2 = 0,yonx2 = 0;
+    
+          if(yön.contains("ileri"))
+           {
+               yony2=0;
+               yony2+=Character.getNumericValue(yön.charAt(0));
+               yony+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("ileri iþlemi girildi");
+                 pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,t[k-1].gezinmeHizi);
+                 pencere.engelKontrol(engelgecmesuresi);
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }
+           if(yön.contains("geri"))
+           {
+                yony2=0;
+               yony2-=Character.getNumericValue(yön.charAt(0));
+               yony-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("geri iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,t[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }
+           if(yön.contains("sag"))
+           {
+                yonx2=0;
+               yonx2+=Character.getNumericValue(yön.charAt(0));
+               yonx+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sag iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,t[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }      
+           
+           if(yön.contains("sol"))
+           {
+               yonx2=0;
+               yonx2-=Character.getNumericValue(yön.charAt(0));
+               yonx-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sol iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,t[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+              if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                  pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }    
+                   
+
+               System.out.println(yön+ " girildi");
+               
+           if(yön.equalsIgnoreCase("cikis"));
+           {
+               pencere.sureGoster();
+               break;
+           }
+           
+           
+      } 
+            
+    }
+   
+        //paletli robot iþlemleri******************************************
+        if(p[k-1]!=null)
+        {
+            
+            float engelgecmesuresi = p[k-1].EngelGecmeSuresiBul();
+            //Paletli problemi çözer...
+            pencere.robotTipiAl("paletli");
+            scan.nextLine();
+            System.out.println("Engel girmek istiyor musunuz ?");
+            engelKontrol=scan.nextLine();
+            
+            if(engelKontrol.equalsIgnoreCase("evet"))
+            {
+                System.out.println("Engel sayisini giriniz");
+                engelsayisi = scan.nextInt();
+                pencere.engelSayisiAl(engelsayisi);
+                int engelsayaci=1;
+                int engelx, engely;
+                while(engelsayisi>0)
+                {
+                    System.out.println(engelsayaci+ " engel koordinatýný giriniz ");
+                    System.out.println("x koordinatý :");
+                    engelx = scan.nextInt();
+                    System.out.println("y koordinatý ");
+                    engely=scan.nextInt();
+                   
+                    pencere.engelKoordinat(engelx, engely);
+                     
+                    engelsayisi--;
+                    engelsayaci++;
+                }
+            
+        
+            }
+            System.out.println("Paletli robotun baþlangýç konumunu giriniz");
+            
+            gezginx=scan.nextInt();
+            gezginy=scan.nextInt();
+            
+            gezginstartx = gezginx;
+            gezginstarty = gezginy;
+           
+            int yonx=0;
+           int yony=0;
+           
+        //   hareket alma iþlemi-------------------
+              pencere.setSize(1200,1200);
+                pencere.setVisible(true);
+               pencere.gezginStartKoordinat(gezginstartx, gezginstarty);
+               
+           while(true)
+        {
+          System.out.println("Yön bilgisi giriniz cikis icin cikis yaziniz");
+
+          String yön;
+          yön=scan2.nextLine();
+          int yony2 = 0,yonx2 = 0;
+    
+          if(yön.contains("ileri"))
+           {
+               yony2=0;
+               yony2+=Character.getNumericValue(yön.charAt(0));
+               yony+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("ileri iþlemi girildi");
+                 pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,p[k-1].gezinmeHizi);
+                 pencere.engelKontrol(engelgecmesuresi);
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }
+           if(yön.contains("geri"))
+           {
+                yony2=0;
+               yony2-=Character.getNumericValue(yön.charAt(0));
+               yony-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("geri iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,p[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }
+           if(yön.contains("sag"))
+           {
+                yonx2=0;
+               yonx2+=Character.getNumericValue(yön.charAt(0));
+               yonx+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sag iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,p[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }      
+           
+           if(yön.contains("sol"))
+           {
+               yonx2=0;
+               yonx2-=Character.getNumericValue(yön.charAt(0));
+               yonx-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sol iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,p[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+              if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                  pencere.sureGoster();
+                  break;
+              }
+               continue;
+           }    
+                   
+
+               System.out.println(yön+ " girildi");
+               
+           if(yön.equalsIgnoreCase("cikis"));
+           {
+               pencere.sureGoster();
+               break;
+           }
+           
+           
+      } 
+            
+     
+        }
+      
+        
+        //Spider robot iþlemleri****************
+          if(s2[k-1]!=null)
+        {
+             float engelgecmesuresi = s2[k-1].EngelGecmeSuresiBul();
+            //Spider problemi çözer...
+            pencere.robotTipiAl("spider");
+            scan.nextLine();
+            System.out.println("Engel girmek istiyor musunuz ?");
+            engelKontrol=scan.nextLine();
+            
+            if(engelKontrol.equalsIgnoreCase("evet"))
+            {
+                System.out.println("Engel sayisini giriniz");
+                engelsayisi = scan.nextInt();
+                pencere.engelSayisiAl(engelsayisi);
+                int engelsayaci=1;
+                int engelx, engely;
+                while(engelsayisi>0)
+                {
+                    System.out.println(engelsayaci+ " engel koordinatýný giriniz ");
+                    System.out.println("x koordinatý :");
+                    engelx = scan.nextInt();
+                    System.out.println("y koordinatý ");
+                    engely=scan.nextInt();
+                   
+                    pencere.engelKoordinat(engelx, engely);
+                     
+                    engelsayisi--;
+                    engelsayaci++;
+                }
+            
+        
+            }
+            System.out.println("Spider robotun baþlangýç konumunu giriniz");
+            
+            gezginx=scan.nextInt();
+            gezginy=scan.nextInt();
+            
+            gezginstartx = gezginx;
+            gezginstarty = gezginy;
+           
+           int yonx=0;
+           int yony=0;
+           
+        //   hareket alma iþlemi-------------------
+            pencere.setSize(1200,1200);
+            pencere.setVisible(true);
+            pencere.gezginStartKoordinat(gezginstartx, gezginstarty);
+               
+           while(true)
+        {
+          System.out.println("Yön bilgisi giriniz cikis icin cikis yaziniz");
+
+          String yön;
+          yön=scan2.nextLine();
+          int yony2 = 0,yonx2 = 0;
+    
+          if(yön.contains("ileri"))
+           {
+               yony2=0;
+               yony2+=Character.getNumericValue(yön.charAt(0));
+               yony+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("ileri iþlemi girildi");
+                 pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,s2[k-1].gezinmeHizi);
+                 pencere.engelKontrol(engelgecmesuresi);
+                  if(pencere.engelKontrol2())
+               {
+                   System.out.println("Spider robot engeli geçemez ");
+                   pencere.sureGoster();
+                   break;
+               }
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+                  
+               continue;
+           }
+           if(yön.contains("geri"))
+           {
+                yony2=0;
+               yony2-=Character.getNumericValue(yön.charAt(0));
+               yony-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("geri iþlemi girildi");
+                  pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,s2[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+               
+               if(pencere.engelKontrol2())
+               {
+                   System.out.println("Spider robot engeli geçemez ");
+                   pencere.sureGoster();
+                   break;
+               }
+               
+                if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+             
+               continue;
+           }
+           if(yön.contains("sag"))
+           {
+                yonx2=0;
+               yonx2+=Character.getNumericValue(yön.charAt(0));
+               yonx+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sag iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,s2[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.engelKontrol2())
+               {
+                   System.out.println("Spider robot engeli geçemez ");
+                   pencere.sureGoster();
+                   break;
+               }
+                if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sureGoster();
+                  break;
+              }
+               
+               continue;
+           }      
+           
+           if(yön.contains("sol"))
+           {
+               yonx2=0;
+               yonx2-=Character.getNumericValue(yön.charAt(0));
+               yonx-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sol iþlemi girildi");
+               pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,s2[k-1].gezinmeHizi);
+               pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.engelKontrol2())
+               {
+                   System.out.println("Spider robot engeli geçemez ");
+                   pencere.sureGoster();
+                   break;
+               }
+              if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                  pencere.sureGoster();
+                  break;
+              }
+               
+               continue;
+           }    
+                   
+
+               System.out.println(yön+ " girildi");
+               
+           if(yön.equalsIgnoreCase("cikis"));
+           {
+               pencere.sureGoster();
+               break;
+           }
+           
+           
+      } 
+ 
+        }
+       
+        
+          //seri robot************************
+          if(s[k-1]!=null)
+          {
+              pencere.robotTipiAl("seri");
+              System.out.println("seri robotun sabitleneceði konumunu giriniz");
+              manistartx=scan.nextInt();
+              manistarty =scan.nextInt();
+         
+          int yonx=0;
+          int yony=0;
+           pencere.setSize(1200,1200);
+           pencere.setVisible(true);
+           pencere.gezginStartKoordinat(manistartx, manistarty);
+              
+                while(true)
+        {
+          System.out.println("Yükün taþýnacaðý yön bilgisini giriniz cikis icin cikis yaziniz");
+
+          String yön;
+          yön=scan2.nextLine();
+          int yony2 = 0,yonx2 = 0;
+          
+          if(yön.contains("ileri"))
+           {    
+               
+               yony2+=Character.getNumericValue(yön.charAt(0));
+               yony+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için ileri iþlemi girildi");
+               pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, s[k-1].tasimahizi, s[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                     pencere.sure2Goster();
+                  break;
+              }
+               if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+               
+           }
+          if(yön.contains("geri"))
+           {          
+               
+               yony2-=Character.getNumericValue(yön.charAt(0));
+               yony-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için geri iþlemi girildi");
+               pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, s[k-1].tasimahizi, s[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    pencere.sure2Goster();
+                  break;
+              }
+                 if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+           }
+          if(yön.contains("sag"))
+           {         
+               
+               yonx2+=Character.getNumericValue(yön.charAt(0));
+               yonx+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için sag iþlemi girildi");
+              pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, s[k-1].tasimahizi, s[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                     pencere.sure2Goster();
+                  break;
+              }
+                 if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+           }
+          if(yön.contains("sol"))
+           {          
+               
+               yonx2-=Character.getNumericValue(yön.charAt(0));
+               yonx-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için sol iþlemi girildi");
+             pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, s[k-1].tasimahizi, s[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                   pencere.sure2Goster();
+                  break;
+              }
+                 if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+           }
+          
+          if(yön.contains("cikis"))
+          {
+              pencere.sure2Goster();
+              break;
+          }
+          
+        }
+ 
+          }
+          
+          
+          
+ //paralel robot özellikleri--------------------------         
+          
+               if(p2[k-1]!=null)
+          {
+              pencere.robotTipiAl("paralel");
+              System.out.println("Paralel robotun sabitleneceði konumunu giriniz");
+              manistartx=scan.nextInt();
+              manistarty =scan.nextInt();
+         
+          int yonx=0;
+          int yony=0;
+           pencere.setSize(1200,1200);
+           pencere.setVisible(true);
+           pencere.gezginStartKoordinat(manistartx, manistarty);
+              
+                while(true)
+        {
+          System.out.println("Yükün taþýnacaðý yön bilgisini giriniz cikis icin cikis yaziniz");
+
+          String yön;
+          yön=scan2.nextLine();
+          int yony2 = 0,yonx2 = 0;
+          
+          if(yön.contains("ileri"))
+           {    
+               
+               yony2+=Character.getNumericValue(yön.charAt(0));
+               yony+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için ileri iþlemi girildi");
+               pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, p2[k-1].tasimahizi, p2[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    pencere.sure2Goster();
+                  break;
+              }
+                if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+               
+           }
+          if(yön.contains("geri"))
+           {          
+               
+               yony2-=Character.getNumericValue(yön.charAt(0));
+               yony-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için geri iþlemi girildi");
+               pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, p2[k-1].tasimahizi, p2[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    pencere.sure2Goster();
+                  break;
+              }
+                if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+               
+           }
+          if(yön.contains("sag"))
+           {         
+               
+               yonx2+=Character.getNumericValue(yön.charAt(0));
+               yonx+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için sag iþlemi girildi");
+              pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, p2[k-1].tasimahizi, p2[k-1].koluzunlugu);
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    pencere.sure2Goster();
+                  break;
+              }
+                if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+           }
+          if(yön.contains("sol"))
+           {          
+               
+               yonx2-=Character.getNumericValue(yön.charAt(0));
+               yonx-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("yük için sol iþlemi girildi");
+             pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, p2[k-1].tasimahizi, p2[k-1].koluzunlugu);
+             if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    pencere.sure2Goster();
+                  break;
+              }
+              if(pencere.TasimaMesafeKontrol())
+               {
+                    pencere.sure2Goster();
+                      break;
+               }
+               
+           }
+          
+          if(yön.contains("cikis"))
+          {
+              pencere.sure2Goster();
+              break;
+          }
+          
+        }
+              
+                
+      }
+        
+               
+ 
+      if(h[k-1]!=null)
+          {
+            float engelgecmesuresi = h[k-1].EngelGecmeSuresiBul();
+            
+              System.out.println("hibrit engel geçme süresi : "+engelgecmesuresi);
+              
+            if(h[k-1].Bacak_sayisi>0)
+            {
+                pencere.robotTipiAl("hibrit.spider");
+            }
+            else
+            {
+                 pencere.robotTipiAl("hibrit");
+            }
+       
+            System.out.println("Engel girmek istiyor musunuz ?");
+            engelKontrol=scan2.nextLine();
+         
+            if(engelKontrol.equalsIgnoreCase("evet"))
+            {
+                System.out.println("Engel sayisini giriniz");
+                engelsayisi = scan.nextInt();
+                pencere.engelSayisiAl(engelsayisi);
+                int engelsayaci=1;
+                int engelx, engely;
+                while(engelsayisi>0)
+                {
+                    System.out.println(engelsayaci+ " engel koordinatýný giriniz ");
+                    System.out.println("x koordinatý :");
+                    engelx = scan.nextInt();
+                    System.out.println("y koordinatý ");
+                    engely=scan.nextInt();
+                   
+                    pencere.engelKoordinat(engelx, engely);
+                     
+                    engelsayisi--;
+                    engelsayaci++;
+                }
+            
+        
+            }
+              System.out.println("Hibrit robotun baþlangýç konumunu giriniz ");
+              System.out.println("x: ");
+              hibritstartx = scan.nextInt();
+              System.out.println("y: ");
+              hibritstarty= scan.nextInt();
+              
+           int yonx=0;
+           int yony=0;
+           
+        //   hareket alma iþlemi-------------------
+            pencere.setSize(1200,1200);
+            pencere.setVisible(true);
+            pencere.gezginStartKoordinat(hibritstartx, hibritstarty);
+            int donguyubitir=0;
+               while(true)
+        {
+            
+              if(donguyubitir==1)
+          {
+              pencere.sureGoster();
+              pencere.sure3Goster(h[k-1].sabitlenmeSuresi,h[k-1].gecisSuresi);
+              break;
+          }
+    
+          System.out.println("Yön bilgisi giriniz");
+            System.out.println("hibrit robotun sabitlenmesi için sabit yaziniz");
+
+          String yön;
+          String yön2;
+          yön=scan2.nextLine();
+          int yony2 = 0,yonx2 = 0;
+
+            if(yön.contains("ileri"))
+           {
+               yony2=0;
+               yony2+=Character.getNumericValue(yön.charAt(0));
+               yony+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("ileri iþlemi girildi");
+                pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,h[k-1].gezinmeHizi);
+                
+                 pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.engelKontrol2())
+                {
+                  System.out.println("Spider robot engelden geçemez!.sdadasfafs.");
+              pencere.sureGoster();
+              break;
+                }      
+                
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                  pencere.sureGoster();
+                    pencere.sure3Goster(0,0);
+              break;
+              }
+               
+           }
+          if(yön.contains("geri"))
+           {
+               yony2=0;
+               yony2-=Character.getNumericValue(yön.charAt(0));
+               yony-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("geri iþlemi girildi");
+                pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,h[k-1].gezinmeHizi);
+                 pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.engelKontrol2())
+                {
+                  System.out.println("Spider robot engelden geçemez!.sdadasfafs.");
+               pencere.sureGoster();
+              break;
+                }             
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                  pencere.sureGoster();
+               pencere.sure3Goster(0,0);
+              break;
+              }
+               
+           }
+           if(yön.contains("sag"))
+           {
+               yonx2=0;
+               yonx2+=Character.getNumericValue(yön.charAt(0));
+               yonx+=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sag iþlemi girildi");
+                pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,h[k-1].gezinmeHizi);
+                 pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.engelKontrol2())
+                {
+                  System.out.println("Spider robot engelden geçemez!.sdadasfafs.");
+               pencere.sureGoster();
+              break;
+                }      
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                  pencere.sureGoster();
+                    pencere.sure3Goster(0,0);
+              break;
+              }
+               
+           }
+           if(yön.contains("sol"))
+           {
+               yonx2=0;
+               yonx2-=Character.getNumericValue(yön.charAt(0));
+               yonx-=Character.getNumericValue(yön.charAt(0));
+               System.out.println("sag iþlemi girildi");
+                pencere.gezginSonKoordinat(yonx, yony, yonx2, yony2,h[k-1].gezinmeHizi);
+                 pencere.engelKontrol(engelgecmesuresi);
+                if(pencere.engelKontrol2())
+                {
+                  System.out.println("Spider robot engelden geçemez!.sdadasfafs.");
+                pencere.sureGoster();
+              break;
+                }      
+                  if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    pencere.sureGoster();
+                 pencere.sure3Goster(0,0);
+              break;
+              }
+               
+           }
+           
+             if(yön.contains("cikis") || donguyubitir==1)
+          {
+              pencere.sureGoster();
+            pencere.sure3Goster(h[k-1].sabitlenmeSuresi,h[k-1].gecisSuresi);
+            
+              break;
+          }
+        
+           //HÝBRÝTÝN MANÝPÜLATÖR HALE GEÇTÝKTEN SONRAKÝ HALÝ--------------------------------------
+           if(yön.contains("sabit"))
+           {
+               pencere.hibritSabitleme();
+               yonx=0;
+               yony=0;
+            
+  
+           while(true)
+           {
+               System.out.println("Yükün taþýnacaðý yön bilgisini giriniz cikis icin cikis yaziniz");
+               yön2=scan3.nextLine();
+           
+                if(yön2.contains("ileri"))
+           {    
+               
+               yony2+=Character.getNumericValue(yön2.charAt(0));
+               yony+=Character.getNumericValue(yön2.charAt(0));
+               System.out.println("yük için ileri iþlemi girildi");
+               pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, h[k-1].tasimahizi, h[k-1].koluzunlugu);
+               if(pencere.TasimaMesafeKontrol())
+               {
+                    donguyubitir=1;
+                  break;
+                  
+               }
+               
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                     donguyubitir=1;
+                  break;
+              }
+               
+           }
+          if(yön2.contains("geri"))
+           {          
+               
+               yony2-=Character.getNumericValue(yön2.charAt(0));
+               yony-=Character.getNumericValue(yön2.charAt(0));
+               System.out.println("yük için geri iþlemi girildi");
+               pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, h[k-1].tasimahizi, h[k-1].koluzunlugu);
+               if(pencere.TasimaMesafeKontrol())
+               {
+                      donguyubitir=1;
+                      break;
+               }
+               if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                    donguyubitir=1;
+                    break;
+              }
+               
+           }
+          if(yön2.contains("sag"))
+           {         
+               
+               yonx2+=Character.getNumericValue(yön2.charAt(0));
+               yonx+=Character.getNumericValue(yön2.charAt(0));
+               System.out.println("yük için sag iþlemi girildi");
+              pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, h[k-1].tasimahizi, h[k-1].koluzunlugu);
+              if(pencere.TasimaMesafeKontrol())
+               {
+                 donguyubitir=1;
+                 break;
+               }
+               if(pencere.ciktimi()==true)
+              {
+                     donguyubitir=1;
+                  break;
+              }
+           }
+          if(yön2.contains("sol"))
+           {          
+               
+               yonx2-=Character.getNumericValue(yön2.charAt(0));
+               yonx-=Character.getNumericValue(yön2.charAt(0));
+               System.out.println("yük için sol iþlemi girildi");
+             pencere.yukSonKoordinat(yonx, yony,yonx2,yony2, h[k-1].tasimahizi, h[k-1].koluzunlugu);
+             if(pencere.TasimaMesafeKontrol())
+               {
+                       donguyubitir=1;
+                    break;
+               }
+             if(pencere.ciktimi()==true)
+              {
+                  System.out.println("ýzgara dýþýna çýkýldý. ");
+                       donguyubitir=1;
+                  break;
+              }
+               
+           }
+          
+          if(yön2.contains("cikis"))
+          {             
+              donguyubitir=1;
+              break;
+          }
+              
+           }
+           
+           
+           
+               
+         
+           }
+           
+          
+             
+          
+        }
+               
+       
+              
+          }
+               
+     
+        
+    }
+    
+ public static void hareketal(int gezginx, int gezginy)
+ {
+ 
+     
+        
+           
+       
+ }
+    
+    
+    
+    
+    
+    
+}
+
+/**
+ *
+ * @author YasarCan
+ */
+public class TekerlekliRobot extends GezginRobot{
+
+    int Tekersayisi;
+            
+     public int setTekersayisi(int Tekersayisi)
+   {
+      return (this.Tekersayisi = Tekersayisi);
+   }
+     @Override
+    public void setGezinmehizi(int gezinmeHizi) {
+        this.gezinmeHizi=gezinmeHizi;
+    }
+
+    @Override
+    public String setRobottipi(String robotTipi)
+    {
+        return (this.robotTipi=robotTipi);
+    }
+
+    @Override
+    public void setYukmiktari(int yukmiktari)
+    {
+        this.yukmiktari=yukmiktari;
+    }
+
+    @Override
+    public void setMotorsayisi(int motorsayisi)
+    {
+        this.motorsayisi=motorsayisi;
+    }
+    
+       @Override
+    public float EngelGecmeSuresiBul() {
+       
+        return  (motorsayisi*0.5f);
+    }
+
+    public int getGezinmeHizi() {
+        return gezinmeHizi;
+    }
+
+    public int getMotorsayisi() {
+        return motorsayisi;
+    }
+
+    public int getYukmiktari() {
+        return yukmiktari;
+    }
+
+    public String getRobotTipi() {
+        return robotTipi;
+    }
+    
+    
+    
+    
+}
+
+/**
+ *
+ * @author YasarCan
+ */
+public class SpiderRobot extends GezginRobot{
+
+  int Bacak_sayisi;
+  
+    public int getBacakSayisi(int Bacak_sayisi)
+    {
+      return (this.Bacak_sayisi = Bacak_sayisi);
+    }
+    
+     @Override
+    public void setGezinmehizi(int gezinmeHizi) {
+        this.gezinmeHizi=gezinmeHizi;
+    }
+    
+  @Override
+    public String setRobottipi(String robotTipi)
+    {
+        return (this.robotTipi=robotTipi);
+    }
+
+    @Override
+    public void setYukmiktari(int yukmiktari)
+    {
+        this.yukmiktari=yukmiktari;
+    }
+
+    @Override
+    public void setMotorsayisi(int motorsayisi)
+    {
+        this.motorsayisi=motorsayisi;
+    }
+    
+     
+  
+   
+
+    
+   
+    
+    
+    
+}
+
+/**
+ *
+ * @author YasarCan
+ */
+public class SeriRobot implements ManipulatorRobot{
+    
+    int tasimahizi;
+    int kapasite;
+    int koluzunlugu;
+    int motorsayisi;
+    int yukmiktari;
+    String robotTipi;
+    
+    
+    @Override
+    public String setRobottipi(String robotTipi) {
+        return (this.robotTipi=robotTipi);
+    }
+    
+    @Override
+    public int setKapasite(int kapasite) {
+     return (this.kapasite = kapasite);
+    }
+    
+   @Override
+    public void setYukmiktari(int yukmiktari){
+        this.yukmiktari=yukmiktari;
+        
+    }
+
+    @Override
+    public void setMotorsayisi(int motorsayisi)
+    {
+        this.motorsayisi=motorsayisi;
+    }
+
+    @Override
+    public int setTasimahizi(int tasimahizi) {
+        return (this.tasimahizi = tasimahizi);
+    }
+
+   
+
+    @Override
+    public int setKoluzunlugu(int koluzunlugu) {
+        return (this.koluzunlugu = koluzunlugu);
+    }
+    
+    
+}
+
+/**
+ *
+ * @author YasarCan
+ */
+public interface Robot {
+  
+    void setMotorsayisi(int motorsayisi);
+    
+    void setYukmiktari(int yukmiktari);
+    
+    String setRobottipi(String robotTipi);
+    
+    
+
+}
+
+public class ParalelRobot implements ManipulatorRobot{
+ 
+     int tasimahizi;
+    int kapasite;
+    int koluzunlugu;
+     int motorsayisi;
+     int yukmiktari;
+    String robotTipi;
+        
+    @Override
+    public String setRobottipi(String robotTipi) {
+        return (this.robotTipi=robotTipi);
+    }  
+    @Override
+    public int setKapasite(int kapasite) {
+     return (this.kapasite = kapasite);
+    }
+    
+   @Override
+    public void setYukmiktari(int yukmiktari){
+        this.yukmiktari=yukmiktari;
+    }
+    @Override
+    public void setMotorsayisi(int motorsayisi)
+    {
+        this.motorsayisi=motorsayisi;
+    }
+    @Override
+    public int setTasimahizi(int tasimahizi) {
+        return (this.tasimahizi = tasimahizi);
+    }
+
+    @Override
+    public int setKoluzunlugu(int koluzunlugu) {
+        return (this.koluzunlugu = koluzunlugu);
+    }
+    
+}
+
+
+/**
+ *
+ * @author YasarCan
+ */
+public class PaletliRobot extends GezginRobot{
+
+    int Palet_sayisi;
+
+    
+  
+    public int setPaletsayisi(int Palet_sayisi)
+    {
+    return (this.Palet_sayisi=Palet_sayisi);
+    }
+     @Override
+    public void setGezinmehizi(int gezinmeHizi) {
+        this.gezinmeHizi=gezinmeHizi;
+    }
+    
+    @Override
+    public String setRobottipi(String robotTipi)
+    {
+        return (this.robotTipi=robotTipi);
+    }
+
+        @Override
+    public void setYukmiktari(int yukmiktari)
+    {
+        this.yukmiktari=yukmiktari;
+    }
+
+        @Override
+    public void setMotorsayisi(int motorsayisi)
+    {
+        this.motorsayisi=motorsayisi;
+    }
+    
+       @Override
+    public float EngelGecmeSuresiBul() {
+       
+        return motorsayisi*3;
+    }
+    
+
+}
+
+/**
+ *
+ * @author YasarCan
+ */
+public interface ManipulatorRobot extends Robot{
+    
+    public int setTasimahizi(int tasimahizi);
+    
+    public int setKapasite(int kapasite);
+    
+    public int setKoluzunlugu(int koluzunlugu);
+    
+    /* @Override
+    public String getRobottipi(String robotTipi);
+
+    @Override
+    public void getYukmiktari(int yukmiktari);
+
+    @Override
+    public void getMotorsayisi(int motorsayisi);
+     */
+    
+    
+    
+    
+}
+public class Hibrit extends GezginRobot implements ManipulatorRobot{
+
+    int tasimahizi;
+    int kapasite;
+    int koluzunlugu;
+    
+    //*****************
+    int Tekersayisi;
+    //*****************
+    int Bacak_sayisi;
+    //*****************
+    int Palet_sayisi;
+    //*****************
+    //*****************
+    int sabitlenmeSuresi;
+    int gecisSuresi;
+            
+    public void getGecisSuresi(int gecisSuresi)
+    {
+       this.gecisSuresi=gecisSuresi;
+    }
+    
+    public void getSabitlenmeSuresi(int sabitlenmeSuresi)
+    {
+        this.sabitlenmeSuresi=sabitlenmeSuresi;
+    }
+    @Override
+    public void setMotorsayisi(int motorsayisi) {
+        this.motorsayisi=motorsayisi;
+    }
+
+    @Override
+    public void setYukmiktari(int yukmiktari) {
+        this.yukmiktari=yukmiktari;
+    }
+
+    @Override
+    public String setRobottipi(String robotTipi) {
+        
+    return (this.robotTipi=robotTipi);
+    }
+
+    @Override
+    public int setTasimahizi(int tasimahizi) {
+       return (this.tasimahizi=tasimahizi);
+    }
+
+    @Override
+    public int setKapasite(int kapasite) {
+    return (this.kapasite=kapasite);    
+    }
+
+    @Override
+    public int setKoluzunlugu(int koluzunlugu) {
+    return (this.koluzunlugu=koluzunlugu);    
+    }
+    
+     public int setTekersayisi(int Tekersayisi)
+   {
+      return (this.Tekersayisi = Tekersayisi);
+   }
+     
+    public int setBacakSayisi(int Bacak_sayisi)
+    {
+      return (this.Bacak_sayisi = Bacak_sayisi);
+    }
+     public int setPaletsayisi(int Palet_sayisi)
+    {
+    return (this.Palet_sayisi=Palet_sayisi);
+    }
+
+    @Override
+    public float EngelGecmeSuresiBul() {
+        
+        if(this.motorsayisi>0)
+        {
+           return  (motorsayisi*0.3f);
+        }
+        if(this.Palet_sayisi>0)
+        {
+             return motorsayisi*5;
+        }
+        if(this.Bacak_sayisi>0)
+        {
+            return 0;
+        }
+        return 0;
+            
+      
+    }
+
+    @Override
+    public void setGezinmehizi(int gezinmeHizi) {
+        this.gezinmeHizi=gezinmeHizi;
+    }
+    
+    
+    
+}
+/**
+ *
+ * @author YasarCan
+ */
+public abstract class GezginRobot implements Robot{
+   
+    
+    protected int gezinmeHizi;
+    protected int motorsayisi;
+    protected int yukmiktari;
+    protected String robotTipi;    
+
+    public void setGezinmehizi(int gezinmeHizi)
+    {
+        
+    }
+//----------------------------------------------------------------
+//superclass kýsmý
+    public float EngelGecmeSuresiBul(){    
+        
+        //spider robotlar engelden geçemez      
+
+        return 0;
+    }
+   
+}
